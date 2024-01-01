@@ -1,0 +1,10 @@
+{
+    "cSpell.ignorePaths": [
+        "**/src/*.txt",  // the same for this one
+        "**/src/*.yaml",  // the same for this one
+        ".git",                // Ignore the .git directory
+    ],
+    "files.associations": {
+        "*.txt": "c"
+    },
+}
