@@ -1,0 +1,14 @@
+{
+	.fileName = ".bashrc",
+	.systemDirectory = "/Users/pritam/",
+	.gitDir = "dirwin_os/",
+	.newName = "bashrc.sh"
+},
+
+{
+	.fileName = ".bashrc",
+	.systemDirectory = "/Users/pritam/",
+	.gitDir = "dirwin_os/",
+	.newName = "bashrc.sh"
+}
+
