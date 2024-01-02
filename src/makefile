@@ -8,6 +8,6 @@ default: main.c pathData.txt
 
 update: lib/
 	@echo [updating \"./lib/user_function.h\"]
-	@curl https://raw.githubusercontent.com/pritam12426/systme-configuration/main/global/user_c_lib/user_function.h -o ./lib/user_function.c > /dev/null 2>&1
+	@curl https://raw.githubusercontent.com/pritam12426/systme-configuration/main/global/user_c_lib/user_function.h -o ./lib/user_function.h > /dev/null 2>&1
 	
 
