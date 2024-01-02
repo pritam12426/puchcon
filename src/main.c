@@ -4,8 +4,20 @@
 #include <sys/stat.h>
 #include "./lib/user_function.c"
 
+/* 
+* You need nerd font to render icons in terminal and as well as in your code editor.
+* For more info visit this side "https://www.nerdfonts.com/"
+*/
+
+#define ICON_NO_CHANGE ""
+#define ICON_UPDATED   ""
+#define ICON_ALERT     "󰩋"
+#define ICON_ALERT     ""
+#define ICON_COPIED    ""
+
 
 bool pathExist(const char *_fullPath);
+void printLog(const char *_fullPath, char _status);
 void updateFile(const char *_source, const char *_target);
 void checkPath(const char *_fileDir, const char *_fileName);
 
@@ -76,4 +88,8 @@ bool pathExist(const char *_fullPath) {
 	struct stat buffer;
 	if (stat(_fullPath, &buffer) == 0) return true;
 	return false;
+}
+
+void printLog(const char *_fullPath, char _status) {
+	;
 }
