@@ -5,6 +5,7 @@
         ".git",                // Ignore the .git directory
     ],
     "files.associations": {
-        "*.txt": "c"
+        "*.txt": "c",
+        "unistd.h": "c"
     },
 }
