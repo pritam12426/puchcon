@@ -1,10 +1,12 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
+#include <stdbool.h>
 #include <sys/stat.h>
+#include "./lib/user_function.c"
 
 
 bool pathExist(const char *_fullPath);
+void updateFile(const char *_source, const char *_target);
 void checkPath(const char *_fileDir, const char *_fileName);
 
 
@@ -43,6 +45,30 @@ void checkPath(const char *_fileDir, const char *_fileName) {
 	}
 
 	return ;
+}
+
+void updateFile(const char *_source, const char *_target) {
+	FILE *in;
+	FILE *out;
+
+	in = fopen(_source, "r");
+	if (in == NULL) {
+		/* TODO: write a fuction for printing log */
+		return ;
+	}
+
+	in = fopen(_target, "w");
+	if (out == NULL) {
+		/* TODO: write a fuction for printing log */
+		return ;
+	}
+
+	int ch;
+	while ((ch = getc(in)) != EOF) {
+		putc(ch, out);
+	}
+
+	/* TODO: write a fuction for printing log */
 }
 
 
