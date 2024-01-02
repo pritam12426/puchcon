@@ -1,1 +1,1 @@
-# PUSH SYSTEM CONFIGURATION TO GITHUB.
+# Push System Configuration To Github.
