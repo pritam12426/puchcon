@@ -1,7 +1,10 @@
 [*]
 	root = true
 	indent_style = space
+	charset = utf-8
 	indent_size = 4
 [*.c]
 	indent_style = tab
 	indent_size = 2
+[Makefile]
+	indent_style = tab
