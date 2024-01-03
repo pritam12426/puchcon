@@ -18,13 +18,14 @@
 
 
 #define TERMINAL_SIZE terminal_col_size()
-#define STATUS_MARGIN 26
+#define STATUS_MARGIN 17
 
 
+unsigned long findChecksum(const char *_fullPath);
 void updateFile(const char *_source, const char *_target);
 void checkPath(const char *_fileDir, const char *_fileName);
 bool pathExist(char *_fullPath, unsigned long _string_len);
-void printLog(const char *_fullPath, char _status, unsigned long _string_len);
+void printLog(const char *_fullPath, char _status);
 
 
 typedef struct {
@@ -36,21 +37,18 @@ typedef struct {
 
 
 int main(void) {
-	printNTime('-', TERMINAL_SIZE, true);
+	printf("|-%-*s|-%s", STATUS_MARGIN + 2, "Status", "Files");
+	printNTime('-', TERMINAL_SIZE - 29, false);
+	printf("|\n");
+
 	Filepath pathData[] = {
 		#include "./pathData.txt"
 	};
 
 	unsigned long len = (sizeof(pathData) / sizeof(Filepath));
-	int i = 0;
-	// for (int i = 0; i < len; i++) {
-		printLog(pathData[i].systemDirectory, 'C', 55);
-		printLog(pathData[i].systemDirectory, 'A', 50);
-		printLog(pathData[i].systemDirectory, 'U', 50);
-		printLog(pathData[i].systemDirectory, 'N', 50);
-		printLog(pathData[i].systemDirectory, 'D', 50);
-		printLog(pathData[i].systemDirectory, 'O', 50);
-	// }
+	for (int i = 0; i < len; i++) {
+		;
+	}
 
 	printNTime('-', TERMINAL_SIZE, true);
 	return 0;
@@ -71,6 +69,7 @@ void checkPath(const char *_fileDir, const char *_fileName) {
 	return ;
 }
 
+
 void updateFile(const char *_source, const char *_target) {
 	FILE *in;
 	FILE *out;
@@ -78,14 +77,14 @@ void updateFile(const char *_source, const char *_target) {
 	in = fopen(_source, "r");
 	if (in == NULL) {
 		unsigned long  len = strlen(_source);
-		printLog(_source, 'O', len);
+		printLog(_source, 'O');
 		return ;
 	}
 
 	in = fopen(_target, "w");
 	if (out == NULL) {
 		unsigned long  len = strlen(_source);
-		printLog(_source, 'O', len);
+		printLog(_source, 'O');
 		return ;
 	}
 
@@ -104,18 +103,19 @@ bool pathExist(char *_fullPath, unsigned long _string_len) {
 		}
 
 		else {
-			printLog(_fullPath, 'O', _string_len);
+			printLog(_fullPath, 'O');
 			return false;
 		}
 	}
 
 	else {
-		printLog(_fullPath, 'O', _string_len);
+		printLog(_fullPath, 'O');
 		return false;
 	}
 }
 
-void printLog(const char *_fullPath, char _status, unsigned long _string_len) {
+
+void printLog(const char *_fullPath, char _status) {
 	/* _status
 	 * char 'C' `copied`     == "File copied to you git repo"
 	 * char 'N' `no change`  == "Nothing is change in you local file"
@@ -126,37 +126,64 @@ void printLog(const char *_fullPath, char _status, unsigned long _string_len) {
 	*/
 
 	unsigned short colorCode = 37;
+	unsigned long _string_len = strlen(_fullPath);
 
 	if (_status == 'C') {
 		colorCode = 36;
-		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_COPIED, (STATUS_MARGIN - 9), "COPIED");
+		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_COPIED, (STATUS_MARGIN), "COPIED");
 	}
 
 	else if (_status == 'O') {
 		colorCode = 33;
-		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_OPEN_ERROR, (STATUS_MARGIN - 9),"OPEN ERROR");
+		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_OPEN_ERROR, (STATUS_MARGIN),"OPEN ERROR");
 	}
 
 	else if (_status == 'D') {
 		colorCode = 91;
-		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_TYPE_DIR, (STATUS_MARGIN - 9), "DIR ERRRO");
+		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_TYPE_DIR, (STATUS_MARGIN), "DIR ERRRO");
 	}
 
 	else if (_status == 'U') {
 		colorCode = 32;
-		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_UPDATED, (STATUS_MARGIN - 9), "UPDATED");
+		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_UPDATED, (STATUS_MARGIN), "UPDATED");
 	}
 
 	else if (_status == 'A') {
 		colorCode = 101;
-		printf("\033[1;%hum%s  %-*s\033[0m", 31, ICON_NOT_FOUND, (STATUS_MARGIN - 9), "FILE NOT FOUND");
+		printf("\033[1;%hum%s  %-*s\033[0m", 31, ICON_NOT_FOUND, (STATUS_MARGIN), "FILE NOT FOUND");
 	}
 
 	else {
-		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_NO_CHANGE, (STATUS_MARGIN - 9), "UP TO DATE");
+		printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_NO_CHANGE, (STATUS_MARGIN), "UP TO DATE");
 	}
 
 	printf("\033[1;35m%s\033[0m", " | ");
-	printf("\033[0;%hum%-*s\033[0m", colorCode, (TERMINAL_SIZE - STATUS_MARGIN), _fullPath);
-	printf("\033[1;35m%s\033[0m\n", " | ");
+
+	unsigned short address = 0;
+
+	if (_string_len > (TERMINAL_SIZE - STATUS_MARGIN)) {
+		address = STATUS_MARGIN + 19;
+	}
+
+	printf("\033[0;%hum%-*s\033[0m", colorCode, (int)((TERMINAL_SIZE - STATUS_MARGIN - 8)), &_fullPath[address]);
+	printf("\033[1;35m%s\033[0m\n", " |");
 }
+
+
+unsigned long findChecksum(const char *_fullPath) {
+	FILE *file;
+	if (file == NULL) {
+		printLog(_fullPath, 'O');
+		return 0;
+	}
+
+	unsigned long sum = 0;
+	int ch;
+
+	while ((ch = getc(file) != EOF)) {
+		sum += ch;
+	}
+
+	return sum;
+}
+
