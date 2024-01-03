@@ -4,9 +4,17 @@
         "**/src/*.yaml",  // the same for this one
         ".git",                // Ignore the .git directory
     ],
+
+    "[html][css]": {
+		"editor.formatOnSave": false,
+		// "editor.formatOnType": true,
+		"editor.suggest.insertMode": "replace",
+	},
+    
     "files.associations": {
         "*.txt": "c",
         "unistd.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "string.h": "c"
     },
 }
