@@ -17,7 +17,6 @@
 #define ICON_OPEN_ERROR "󰀦"
 
 
-
 #define TERMINAL_SIZE terminal_col_size()
 #define STATUS_MARGIN 26
 
@@ -37,6 +36,7 @@ typedef struct {
 
 
 int main(void) {
+	printNTime('-', TERMINAL_SIZE, true);
 	Filepath pathData[] = {
 		#include "./pathData.txt"
 	};
@@ -52,6 +52,7 @@ int main(void) {
 		printLog(pathData[i].systemDirectory, 'O', 50);
 	// }
 
+	printNTime('-', TERMINAL_SIZE, true);
 	return 0;
 }
 
