@@ -1,13 +1,14 @@
 [*]
 	root = true
-	indent_style = space
 	charset = utf-8
 	indent_size = 4
+	indent_style = space
+	insert_final_newline = true
 [*.c]
 	indent_style = tab
 	indent_size = 2
-[Makefile]
+[makefile]
 	indent_style = tab
-[*.html]
+[*.md]
 	indent_style = tab
 	indent_size = 4
