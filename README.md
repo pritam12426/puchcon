@@ -45,6 +45,12 @@ export COMP_GIT_SOURCE_DIR="/home/pritam/Desktop/programming/git_repositories/my
 
 The YAML configuration file should have the following structure and name `pathData.txt`:
 
+<h3 align="center">
+	<a href="">
+		<img src="./img/sample_log.png" alt="Diagram">
+	</a>
+</h3>
+
 ``` c
 {
 	.fileName = ".bashrc",
@@ -63,6 +69,7 @@ The YAML configuration file should have the following structure and name `pathDa
 	.newName = "bashrc.sh",
 },
 ```
+
 ``` c
 {
 	.fileName = ".bashrc",
