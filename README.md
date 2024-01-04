@@ -31,3 +31,43 @@
 
 <h2>License</h2>
 <a href="./LICENSE">MIT License</a>
+
+
+``` sh
+# Local git repo path in which you wants to sync your files.
+# Example: Syncing files to the 'my_config' repository on GitHub
+export COMP_GIT_SOURCE_DIR="/home/pritam/Desktop/programming/git_repositories/my_config/"
+```
+
+<h2>
+	YAML Configuration
+</h2>
+
+The YAML configuration file should have the following structure and name `pathData.txt`:
+
+``` c
+{
+	.fileName = ".bashrc",
+
+	// The folder path where the original file is located.
+	// Example: The '.bashrc' file is located in the '/home/pritam/' directory.
+	.systemDirectory = "/home/pritam/",
+
+	// The folder path inside the local git repo where you want to sync the file.
+	// Example: The '.bashrc' file will be synced to the 'linux_ubuntu/' folder.
+	.gitDir = "dirwin_os/",
+
+
+	// The new name for the file inside the git repo.
+	// Example: The '.bashrc' file will be renamed to 'bashrc.sh' in the git repo.
+	.newName = "bashrc.sh",
+},
+```
+``` c
+{
+	.fileName = ".bashrc",
+	.systemDirectory = "home/pritam/",
+	.gitDir = "dirwin_os/",
+	.newName = "bashrc.sh",
+}
+```
