@@ -22,16 +22,15 @@
 #define TERMINAL_SIZE terminal_col_size()
 
 
-#define SOURCE_GIT_DIRECTORY getenv("COMP_SOURCE_DIR")
+#define SOURCE_GIT_DIRECTORY getenv("COMP_GIT_SOURCE_DIR")
 
-
+int checkCompEnv(void);
 void makeDir(char *_child_dir);
 bool pathExist(char *_fullPath);
 unsigned long findChecksum(const char *_fullPath);
 void printLog(const char *_fullPath, char _status);
 void updateFile(const char *_source, const char *_target);
 void checkPath(const char *_fileDir, const char *_fileName);
-int checkCompEnv(void);
 
 
 typedef struct {
@@ -43,6 +42,7 @@ typedef struct {
 
 
 int main(void) {
+	checkCompEnv();
 	printf("|-\033[1;35m%-*s\033[0m|-\033[1;34m%s\033[0m ", STATUS_MARGIN + 2, "STATUS", "FILES");
 	printNTime('-', TERMINAL_SIZE - 30, false);
 	printf("|\n");
@@ -67,12 +67,13 @@ int main(void) {
 			printLog(full_local_path, 'A');
 			continue;
 		}
-		
+
+		git_path_len += strlen(SOURCE_GIT_DIRECTORY);
 		git_path_len += strlen(pathData[i].gitDir);
 		git_path_len += strlen(pathData[i].newName);
 
 		char git_full_path[git_path_len + 1];
-		snprintf(git_full_path, sizeof(git_full_path), "%s%s", pathData[i].gitDir, pathData[i].newName);
+		snprintf(git_full_path, sizeof(git_full_path), "%s%s%s", SOURCE_GIT_DIRECTORY, pathData[i].gitDir, pathData[i].newName);
 
 		if (pathExist(git_full_path)) {
 			if (findChecksum(git_full_path) != findChecksum(full_local_path)) {
@@ -84,7 +85,9 @@ int main(void) {
 		}
 
 		else {
-			//  TODO: add a function making directory in side git dir;
+			makeDir(pathData[i].gitDir);
+			updateFile(full_local_path, git_full_path);
+			printLog(git_full_path, 'C');
 		}
 	}
 
@@ -93,6 +96,7 @@ int main(void) {
 	printf("|\n");
 	return 0;
 }
+
 
 void updateFile(const char *_source, const char *_target) {
 	FILE *in;
@@ -217,18 +221,30 @@ unsigned long findChecksum(const char *_fullPath) {
 }
 
 void makeDir(char *_child_dir) {
+	unsigned long _len = strlen(_child_dir) + 1;
+	char child_dir[_len];
+
+	strcpy(child_dir, _child_dir);
+
+	char *pwd = getenv("PWD");
+
 	chdir(SOURCE_GIT_DIRECTORY);
-	char *ch = strtok(_child_dir, "/");
+	char *ch = strtok(child_dir, "/");
+
 	while ((ch = strtok(NULL, "/")) != NULL) {
 		mkdir(ch, 0755);
 		chdir(ch);
 	}
+
+	chdir(pwd);
 }
 
 
 int checkCompEnv(void) {
 	if (SOURCE_GIT_DIRECTORY == NULL) {
-		// TODO: add error message.
+		printf("Error");
+		return false;
+		// TODO: add an errro message for env is not found;
 	}
 
 	struct stat stat_buffer;
@@ -237,6 +253,7 @@ int checkCompEnv(void) {
 
 	if (status == 0) {
 		if (S_ISDIR(stat_buffer.st_mode)) {
+			// TODO: Add an errro message for env is not a valid local path.
 			return 0;
 		}
 	}
