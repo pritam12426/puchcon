@@ -19,10 +19,9 @@
 
 
 #define STATUS_MARGIN 17
-#define TERMINAL_SIZE terminal_col_size()
 
-
-#define SOURCE_GIT_DIRECTORY getenv("COMP_GIT_SOURCE_DIR")
+static int terminal_size = 0;
+static char *source_git_directory = NULL;
 
 
 int checkCompEnv(void);
@@ -43,9 +42,14 @@ typedef struct {
 
 
 int main(void) {
-	checkCompEnv();
+	/* writing data into Global variable */
+	terminal_size = terminal_col_size();
+	source_git_directory = getenv("COMP_GIT_SOURCE_DIR");
+
+	if (checkCompEnv() != 0) return 1;
+
 	printf("|-\033[1;35m%-*s\033[0m|-\033[1;34m%s\033[0m ", STATUS_MARGIN + 2, "STATUS", "FILES");
-	printNTime('-', TERMINAL_SIZE - 30, false);
+	printNTime('-', terminal_size - 30, false);
 	printf("|\n");
 
 	Filepath pathData[] = {
@@ -69,12 +73,12 @@ int main(void) {
 			continue;
 		}
 
-		git_path_len += strlen(SOURCE_GIT_DIRECTORY);
+		git_path_len += strlen(source_git_directory);
 		git_path_len += strlen(pathData[i].gitDir);
 		git_path_len += strlen(pathData[i].newName);
 
 		char git_full_path[git_path_len + 1];
-		snprintf(git_full_path, sizeof(git_full_path), "%s%s%s", SOURCE_GIT_DIRECTORY, pathData[i].gitDir, pathData[i].newName);
+		snprintf(git_full_path, sizeof(git_full_path), "%s%s%s", source_git_directory, pathData[i].gitDir, pathData[i].newName);
 
 		if (pathExist(git_full_path)) {
 			if (findChecksum(git_full_path) != findChecksum(full_local_path)) {
@@ -93,7 +97,7 @@ int main(void) {
 	}
 
 	putchar('|');
-	printNTime('-', TERMINAL_SIZE - 2, false);
+	printNTime('-', terminal_size - 2, false);
 	printf("|\n");
 	return 0;
 }
@@ -186,13 +190,15 @@ void printLog(const char *_fullPath, char _status) {
 
 	printf("\033[1;35m%s\033[0m", " | ");
 
-	unsigned short address = 0;
+	unsigned short address = 0, margin = 8;
 
-	if (_string_len > (TERMINAL_SIZE - STATUS_MARGIN)) {
-		address = STATUS_MARGIN + 19;
+	if (_string_len > (terminal_size - 23)) {
+		printf("\033[0;%dm%s\033[0m", colorCode, "...");
+		address = (_string_len - (terminal_size - 23)) + 5;
+		margin += 3;
 	}
 
-	printf("\033[0;%hum%-*s\033[0m", colorCode, (int)((TERMINAL_SIZE - STATUS_MARGIN - 8)), &_fullPath[address]);
+	printf("\033[0;%hum%-*s\033[0m", colorCode, (int)((terminal_size - STATUS_MARGIN - margin)), &_fullPath[address]);
 	printf("\033[1;35m%s\033[0m\n", " |");
 	fflush(stdout);
 }
@@ -230,7 +236,7 @@ void makeDir(char *_child_dir) {
 
 	char *pwd = getenv("PWD");
 
-	chdir(SOURCE_GIT_DIRECTORY);
+	chdir(source_git_directory);
 	char *ch = strtok(child_dir, "/");
 
 	while (ch != NULL) {
@@ -245,19 +251,18 @@ void makeDir(char *_child_dir) {
 
 
 int checkCompEnv(void) {
-	if (SOURCE_GIT_DIRECTORY == NULL) {
+	if (source_git_directory == NULL) {
 		printf("Error");
-		return false;
+		return 1;
 		// TODO: add an errro message for env is not found;
 	}
 
 	struct stat stat_buffer;
 
-	int status = stat(SOURCE_GIT_DIRECTORY, &stat_buffer);
+	int status = stat(source_git_directory, &stat_buffer);
 
 	if (status == 0) {
 		if (S_ISDIR(stat_buffer.st_mode)) {
-			// TODO: Add an errro message for env is not a valid local path.
 			return 0;
 		}
 	}
