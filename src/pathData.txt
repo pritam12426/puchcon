@@ -1,13 +1,111 @@
 {
 	.fileName = ".bashrc",
-	.systemDirectory = "/home/pritam/",
+	.systemDirectory = "/Users/pritam/",
 	.gitDir = "dirwin_os/",
 	.newName = "bashrc.sh",
 },
 
 {
 	.fileName = ".zshrc",
-	.systemDirectory = "/home/pritam/",
+	.systemDirectory = "/Users/pritam/",
 	.gitDir = "dirwin_os/",
 	.newName = "zshrc.sh",
 },
+
+{
+	.fileName = "init.vim",
+	.systemDirectory = "/Users/pritam/.config/nvim/",
+	.gitDir = "dirwin_os/config/neo_vim/",
+	.newName = "init.vim",
+},
+
+{
+	.fileName = "htoprc",
+	.systemDirectory = "/Users/pritam/.config/htop/",
+	.gitDir = "dirwin_os/config/htop/",
+	.newName = "htoprc",
+},
+
+{
+	.fileName = "key_bindings.ron",
+	.systemDirectory = "/Users/pritam/.config/gitui/",
+	.gitDir = "dirwin_os/config/gitui/",
+	.newName = "key_bindings.ron",
+},
+
+{
+	.fileName = "user_function.h",
+	.systemDirectory = "/Users/pritam/Developer/c_lang/lib/",
+	.gitDir = "global/user_c_lib/",
+	.newName = "user_function.h",
+},
+
+{
+	.fileName = "config",
+	.systemDirectory = "/Users/pritam/.config/ncdu/",
+	.gitDir = "dirwin_os/config/",
+	.newName = "config",
+},
+
+{
+	.fileName = "alias.plugin.zsh",
+	.systemDirectory = "/Users/pritam/.oh-my-zsh/plugins/alias/",
+	.gitDir = "dirwin_os/",
+	.newName = "alias.plugin.zsh",
+},
+
+{
+	.fileName = "comp",
+	.systemDirectory = "/Users/pritam/Developer/system_script/",
+	.gitDir = "dirwin_os/system_script/",
+	.newName = "comp.sh",
+},
+
+{
+	.fileName = "fff",
+	.systemDirectory = "/Users/pritam/Developer/system_script/",
+	.gitDir = "dirwin_os/system_script/",
+	.newName = "fff.py",
+},
+
+{
+	.fileName = "ff",
+	.systemDirectory = "/Users/pritam/Developer/system_script/",
+	.gitDir = "dirwin_os/system_script/",
+	.newName = "ff.py",
+},
+
+{
+	.fileName = "f",
+	.systemDirectory = "/Users/pritam/Developer/system_script/",
+	.gitDir = "dirwin_os/system_script/",
+	.newName = "f.sh",
+},
+
+{
+	.fileName = "renamepwd",
+	.systemDirectory = "/Users/pritam/Developer/system_script/",
+	.gitDir = "dirwin_os/system_script/",
+	.newName = "rename_pwd.py",
+},
+
+{
+	.fileName = "supported_template.txt",
+	.systemDirectory = "/Users/pritam/Developer/system_script/git_ignore/",
+	.gitDir = "dirwin_os/system_script/git_ignore/",
+	.newName = "supported_template.txt",
+},
+
+{
+	.fileName = "supported_template_list.yaml",
+	.systemDirectory = "/Users/pritam/Developer/system_script/git_ignore/",
+	.gitDir = "dirwin_os/system_script/git_ignore/",
+	.newName = "supported_template_list.yaml",
+},
+
+{
+	.fileName = "mk_git_ignore.py",
+	.systemDirectory = "/Users/pritam/Developer/system_script/git_ignore/",
+	.gitDir = "dirwin_os/system_script/git_ignore/",
+	.newName = "mk_git_ignore.py",
+}

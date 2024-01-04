@@ -24,6 +24,7 @@
 
 #define SOURCE_GIT_DIRECTORY getenv("COMP_GIT_SOURCE_DIR")
 
+
 int checkCompEnv(void);
 void makeDir(char *_child_dir);
 bool pathExist(char *_fullPath);
@@ -78,16 +79,16 @@ int main(void) {
 		if (pathExist(git_full_path)) {
 			if (findChecksum(git_full_path) != findChecksum(full_local_path)) {
 				updateFile(full_local_path, git_full_path);
-				printLog(git_full_path, 'U');
+				printLog(full_local_path, 'U');
 			}
 
-			else printLog(git_full_path, 'N');
+			else printLog(full_local_path, 'N');
 		}
 
 		else {
 			makeDir(pathData[i].gitDir);
 			updateFile(full_local_path, git_full_path);
-			printLog(git_full_path, 'C');
+			printLog(full_local_path, 'C');
 		}
 	}
 
@@ -171,8 +172,8 @@ void printLog(const char *_fullPath, char _status) {
 			printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_TYPE_DIR, (STATUS_MARGIN), "DIR ERRRO");
 			break;
 		case 'U':
-			colorCode = 101;
-			printf("\033[1;%hum%s  %-*s\033[0m", 31, ICON_NOT_FOUND, (STATUS_MARGIN), "FILE NOT FOUND");
+			colorCode = 32;
+			printf("\033[1;%hum%s  %-*s\033[0m", colorCode, ICON_UPDATED, (STATUS_MARGIN), "UPDATED");
 			break;
 		case 'A':
 			colorCode = 101;
@@ -220,6 +221,7 @@ unsigned long findChecksum(const char *_fullPath) {
 	return sum;
 }
 
+
 void makeDir(char *_child_dir) {
 	unsigned long _len = strlen(_child_dir) + 1;
 	char child_dir[_len];
@@ -231,9 +233,11 @@ void makeDir(char *_child_dir) {
 	chdir(SOURCE_GIT_DIRECTORY);
 	char *ch = strtok(child_dir, "/");
 
-	while ((ch = strtok(NULL, "/")) != NULL) {
+	while (ch != NULL) {
 		mkdir(ch, 0755);
 		chdir(ch);
+
+		ch = strtok(NULL, "/");
 	}
 
 	chdir(pwd);
