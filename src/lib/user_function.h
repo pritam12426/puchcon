@@ -118,6 +118,16 @@ void bubbleSort(int *_arr, unsigned long _len) {
 }
 
 
+void intArrPrint(int *_arr, const unsigned long _len, const char *mess) {
+	int first_width = countOfInt(intArrLargestNum(_arr, _len));
+	int second_width = countOfInt(_len);
+
+	for (int i = 0; i < _len; i++) {
+		printf("%s_at_index[\033[1;35m%*d\033[0m] = \033[1;36m%*d\033[0m\n", mess, second_width, i, first_width, _arr[i]);
+	}
+}
+
+
 int terminal_col_size(void) {
 	struct winsize w;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
