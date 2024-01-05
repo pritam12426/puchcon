@@ -48,6 +48,7 @@ int main(void) {
 
 	if (checkCompEnv() != 0) return 1;
 
+	printf("\033[1;33m%s\033[0m: \033[1;31m%s\033[0m \033[1;37m%s\033[0m\n" , "Local Git Repo", "󰊢", source_git_directory);
 	printf("|-\033[1;35m%-*s\033[0m|-\033[1;34m%s\033[0m ", STATUS_MARGIN + 2, "STATUS", "FILES");
 	printNTime('-', terminal_size - 30, false);
 	printf("|\n");
