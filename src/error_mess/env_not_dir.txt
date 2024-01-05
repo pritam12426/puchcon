@@ -1,0 +1,2 @@
+" is not a valid directory type path of local machine\n\n"
+"\t \033[1;33mEXPORT\033[0m \033[1;37mCOMP_GIT_SOURCE_DIR=\033[0m\"<|path/of/you/local/git/repository|>\"\n"

@@ -201,6 +201,7 @@ void printLog(const char *_fullPath, char _status) {
 	printf("\033[0;%hum%-*s\033[0m", colorCode, (int)((terminal_size - STATUS_MARGIN - margin)), &_fullPath[address]);
 	printf("\033[1;35m%s\033[0m\n", " |");
 	fflush(stdout);
+	// usleep(100000);
 }
 
 
@@ -252,9 +253,12 @@ void makeDir(char *_child_dir) {
 
 int checkCompEnv(void) {
 	if (source_git_directory == NULL) {
-		printf("Error");
+		const char *env_not_fond = {
+			#include "./error_mess/not_found_env.txt"
+		};
+
+		printf("%s", env_not_fond);
 		return 1;
-		// TODO: add an errro message for env is not found;
 	}
 
 	struct stat stat_buffer;
@@ -264,6 +268,17 @@ int checkCompEnv(void) {
 	if (status == 0) {
 		if (S_ISDIR(stat_buffer.st_mode)) {
 			return 0;
+		}
+
+		else {
+			const char *env_not_dir = {
+				#include "./error_mess/env_not_dir.txt"
+			};
+
+			printf("\033[1;33mCOMP_GIT_SOURCE_DIR\033[0m `ENVIRONMENT VARIABLE`");
+			printf(" { \033[1;101m%s\033[0m } ", source_git_directory);
+			printf("%s\n", env_not_dir);
+			return 1;
 		}
 	}
 
