@@ -280,6 +280,16 @@ int checkCompEnv(void) {
 
 	if (status == 0) {
 		if (S_ISDIR(stat_buffer.st_mode)) {
+			char *cwd = getenv("PWD");
+			chdir(source_git_directory);
+
+			if (system("git rev-parse 2>> /dev/null") != 0) {
+				printf("\t \033[1;31m\033[0m  \033[1;33mENVIRONMENT VARIABLE\033[0m  \033[1;37mCOMP_GIT_SOURCE_DIR\033[0m `\033[1;101m%s\033[0m` is not a git repository!\n", source_git_directory);
+				chdir(cwd);
+				return 1;
+			}
+
+			chdir(cwd);
 			return 0;
 		}
 
