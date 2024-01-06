@@ -19,31 +19,19 @@
 	</li>
 </ul>
 
-<h1>
-	Basic idea behind this project.
-</h1>
+<!-- <h2>
+	Basic Idea Behind This Project.
+</h2> -->
 
 <h3 align="center">
 	<a href="">
-		<img src="./img/idea_diagram.svg" alt="Diagram">
+		<!-- <img src="./img/idea_diagram.svg" alt="Diagram"> -->
 	</a>
 </h3>
 
-<h2>License</h2>
-<a href="./LICENSE">MIT License</a>
-
-
-``` sh
-# Local git repo path in which you wants to sync your files.
-# Example: Syncing files to the 'my_config' repository on GitHub
-export COMP_GIT_SOURCE_DIR="/home/pritam/Desktop/programming/git_repositories/my_config/"
-```
-
 <h2>
-	YAML Configuration
+	Screen Of Log Status Of `pushcon`
 </h2>
-
-The YAML configuration file should have the following structure and name `pathData.txt`:
 
 <h3 align="center">
 	<a href="">
@@ -51,13 +39,23 @@ The YAML configuration file should have the following structure and name `pathDa
 	</a>
 </h3>
 
+
+``` sh
+# Local git repo path in which you wants to sync your files.
+# Example: Syncing files to the 'my_config' repository on GitHub
+export COMP_GIT_SOURCE_DIR="<|path /to/you/local/repository/|>"
+```
+<h2>
+	Configuration Example.
+</h2>
+
+
 ``` c
 {
 	.fileName = ".bashrc",
 
 	// The folder path where the original file is located.
-	// Example: The '.bashrc' file is located in the '/home/pritam/' directory.
-	.systemDirectory = "/home/pritam/",
+	// Example: The '.bashrc' file is located in the '/home/pritam/' directory.  .systemDirectory = "/home/pritam/",
 
 	// The folder path inside the local git repo where you want to sync the file.
 	// Example: The '.bashrc' file will be synced to the 'linux_ubuntu/' folder.
@@ -69,6 +67,9 @@ The YAML configuration file should have the following structure and name `pathDa
 	.newName = "bashrc.sh",
 },
 ```
+<h2>
+	Multi Configuration Example
+</h2>
 
 ``` c
 {
@@ -76,5 +77,15 @@ The YAML configuration file should have the following structure and name `pathDa
 	.systemDirectory = "home/pritam/",
 	.gitDir = "dirwin_os/",
 	.newName = "bashrc.sh",
+},
+
+{
+	.fileName = ".bashrc",
+	.systemDirectory = "home/pritam/",
+	.gitDir = "dirwin_os/",
+	.newName = "bashrc.sh",
 }
 ```
+
+<h2>License</h2>
+<a href="./LICENSE">MIT License</a>
