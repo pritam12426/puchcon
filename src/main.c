@@ -30,7 +30,7 @@ bool pathExist(char *_fullPath);
 unsigned long findChecksum(const char *_fullPath);
 void printLog(const char *_fullPath, char _status);
 void updateFile(const char *_source, const char *_target);
-void checkPath(const char *_fileDir, const char *_fileName);
+bool fileCmp(const char *_fullPath, const char *_fullPath2);
 
 
 typedef struct {
@@ -82,7 +82,7 @@ int main(void) {
 		snprintf(git_full_path, sizeof(git_full_path), "%s%s%s", source_git_directory, pathData[i].gitDir, pathData[i].newName);
 
 		if (pathExist(git_full_path)) {
-			if (findChecksum(git_full_path) != findChecksum(full_local_path)) {
+			if ( ! fileCmp(full_local_path, git_full_path)) {
 				updateFile(full_local_path, git_full_path);
 				printLog(full_local_path, 'U');
 			}
@@ -206,27 +206,39 @@ void printLog(const char *_fullPath, char _status) {
 }
 
 
-unsigned long findChecksum(const char *_fullPath) {
-	FILE *file;
+bool fileCmp(const char *_fullPath, const char *_fullPath2) {
+	FILE *file_local;
 
-	file = fopen(_fullPath, "rb");
+	file_local = fopen(_fullPath, "r");
 
-	if (file == NULL) {
-		fclose(file);
+
+	if (file_local == NULL) {
+		fclose(file_local);
 		printLog(_fullPath, 'O');
-		return 0;
+		return false;
 	}
 
-	unsigned long sum = 0;
-	int ch;
+	FILE *file_git;
 
-	while ((ch = getc(file) != EOF)) {
-		sum += ch;
+	file_git = fopen(_fullPath2, "r");
+
+	if (file_git == NULL) {
+		fclose(file_git);
+		printLog(_fullPath2, 'O');
+		return false;
 	}
 
-	fclose(file);
+	int ch, ch2;
 
-	return sum;
+	while ((ch = getc(file_local)) != EOF) {
+		ch2 = getc(file_git);
+		if (ch != ch2) return false;
+	}
+
+	fclose(file_git);
+	fclose(file_local);
+
+	return true;
 }
 
 
