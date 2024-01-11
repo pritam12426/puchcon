@@ -27,7 +27,6 @@ static char *source_git_directory = NULL;
 int checkCompEnv(void);
 void makeDir(char *_child_dir);
 bool pathExist(char *_fullPath);
-unsigned long findChecksum(const char *_fullPath);
 void printLog(const char *_fullPath, char _status);
 void updateFile(const char *_source, const char *_target);
 bool fileCmp(const char *_fullPath, const char *_fullPath2);
@@ -110,14 +109,12 @@ void updateFile(const char *_source, const char *_target) {
 
 	in = fopen(_source, "r");
 	if (in == NULL) {
-		unsigned long  len = strlen(_source);
 		printLog(_source, 'O');
 		return ;
 	}
 
 	out = fopen(_target, "w");
 	if (out == NULL) {
-		unsigned long  len = strlen(_source);
 		printLog(_source, 'O');
 		return ;
 	}
