@@ -4,7 +4,10 @@
 #include <stdbool.h>
 #include <termios.h>
 #include <sys/stat.h>
+
+
 #include "./lib/user_function.h"
+
 
 /*
 * You need nerd font to render icons in terminal and as well as in your code editor.
@@ -26,9 +29,10 @@ static int terminal_size = 0;
 static char *SOURCE_GIT_DIRECTORY = NULL;
 
 
-int pushRepo(void);
+int  pushRepo(void);
+void gitCommit(void);
 int  checkCompEnv(void);
-int  unChangeFiles(void);
+bool unChangeFiles(void);
 void makeDir(char *_child_dir);
 char getCharWithoutEnter(void);
 bool pathExist(char *_fullPath);
@@ -106,17 +110,13 @@ int main(void) {
 	printf("|\n");
 
 	chdir(SOURCE_GIT_DIRECTORY);
-	if (unChangeFiles() != 0) {
-		return 1;
+	if (unChangeFiles() == true) {
+		// TODO: Add a function for commit the file.
 	}
 
 	if (pushRepo() != 0) {
 		return 1;
 	}
-
-	// if () {
-		// TODO: Add a function for commit the file.
-	// }
 
 	return 0;
 }
@@ -324,7 +324,7 @@ int checkCompEnv(void) {
 }
 
 
-int unChangeFiles(void) {
+bool unChangeFiles(void) {
 	printf("\nFOUNDED CHANGES IN\n");
 	FILE *fp;
 	int ch = 0;
@@ -333,6 +333,7 @@ int unChangeFiles(void) {
 
 	unsigned line = 1;
 	printf("%3d\033[1;35m: \033[0m", line++);
+	bool commit = false;
 
 	for (int i = 0; (ch = getc(fp)) != -1; i++) {
 		if (i < 3) {
@@ -347,11 +348,13 @@ int unChangeFiles(void) {
 		}
 
 		putchar(ch);
+
+		commit = true;
 	};
 
 	pclose(fp);
 	printf("\b\b\b\b\b");
-	return 0;
+	return commit;
 }
 
 
@@ -390,6 +393,7 @@ int pushRepo() {
 	return 0;
 }
 
+
 char getCharWithoutEnter(void) {
 	char ch;
 	struct termios oldt, newt;
@@ -404,4 +408,9 @@ char getCharWithoutEnter(void) {
 
 	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
 	return ch;
+}
+
+
+void gitCommit(void) {
+	;
 }
