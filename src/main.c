@@ -30,7 +30,7 @@ static char *SOURCE_GIT_DIRECTORY = NULL;
 
 
 int  pushRepo(void);
-void gitCommit(void);
+int  gitCommit(void);
 int  checkCompEnv(void);
 bool unChangeFiles(void);
 void makeDir(char *_child_dir);
@@ -110,8 +110,12 @@ int main(void) {
 	printf("|\n");
 
 	chdir(SOURCE_GIT_DIRECTORY);
-	if (unChangeFiles() == true) {
-		// TODO: Add a function for commit the file.
+
+	unChangeFiles();
+
+	if (gitCommit() != 0) {
+		printf("Error while commit the code\n");
+		return 1;
 	}
 
 	if (pushRepo() != 0) {
@@ -411,6 +415,50 @@ char getCharWithoutEnter(void) {
 }
 
 
-void gitCommit(void) {
-	;
+int gitCommit(void) {
+	FILE *fp = popen("git status --short", "r");
+
+	if (fp == NULL) {
+		// perror("Error opening pipe");
+		return 1;
+	}
+
+	int ch;
+
+	if ((ch = getc(fp)) == EOF) {
+		pclose(fp);
+		return 1;
+	}
+	else {
+		pclose(fp);
+	}
+
+	printf("Uncommit files found :: Hit [y/n] to push: ");
+
+	if (getCharWithoutEnter() != 'y') {
+		putchar('\n');
+		return 1;
+	}
+	else {
+		putchar('\n');
+	}
+
+	char commit_command[(15 + 100 + 14 + 5)];
+	system("git add --all > /dev/null 2>&1");
+
+	char commit[100];
+
+	printf("Enter the commit for the change >> ");
+	scanf("%[^\n]%*c", commit);
+
+	strcat(commit_command, commit);
+	sprintf(commit_command, "git commit -m '%s' %s", commit, " > /dev/null 2>&1");
+	printf("%s\n", commit_command);
+
+	if (system(commit_command) == 0) {
+		return 0;
+	}
+	else {
+		return 1;
+	}
 }
