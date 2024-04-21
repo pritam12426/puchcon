@@ -1,9 +1,13 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <termios.h>
+#include <termios.h>
+
 #include <sys/stat.h>
+#include "getch.h"
 
 
 #include "./lib/user_function.h"
@@ -34,7 +38,6 @@ int  gitCommit(void);
 int  checkCompEnv(void);
 bool unChangeFiles(void);
 void makeDir(char *_child_dir);
-char getCharWithoutEnter(void);
 bool pathExist(char *_fullPath);
 void printLog(const char *_fullPath, char _status);
 void updateFile(const char *_source, const char *_target);
@@ -48,6 +51,8 @@ typedef struct {
 	char *newName;
 } Filepath;
 
+
+static bool FIND_CHANGE = false;
 
 int main(void) {
 	/* writing data into Global variable */
@@ -109,6 +114,10 @@ int main(void) {
 	printNTime('-', terminal_size - 2, false);
 	printf("|\n");
 
+	// if (FIND_CHANGE == false) {
+	// 	return 0;
+	// }
+
 	chdir(SOURCE_GIT_DIRECTORY);
 
 	unChangeFiles();
@@ -146,6 +155,8 @@ void updateFile(const char *_source, const char *_target) {
 	while ((ch = getc(in)) != EOF) {
 		putc(ch, out);
 	}
+
+	FIND_CHANGE = true;
 }
 
 
@@ -378,8 +389,9 @@ int pushRepo() {
 
 	if ( ! isPushed) {
 		printf("Repo is not push :: Hit [y/n] to push: ");
+		fflush(stdout);
 
-		if (getCharWithoutEnter() == 'y') {
+		if (getch() == 'y') {
 			printf("\nTrying to push...\n");
 			if (system("git push origin main -f > /dev/null 2>&1") == 0) {
 				printf("Pushed Successful.\n");
@@ -396,24 +408,6 @@ int pushRepo() {
 
 	return 0;
 }
-
-
-char getCharWithoutEnter(void) {
-	char ch;
-	struct termios oldt, newt;
-
-	tcgetattr(STDIN_FILENO, &oldt);
-
-	newt = oldt;
-	newt.c_lflag &= ~(ICANON | ECHO);
-	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
-	ch = getchar();
-
-	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-	return ch;
-}
-
 
 int gitCommit(void) {
 	FILE *fp = popen("git status --short", "r");
@@ -434,14 +428,14 @@ int gitCommit(void) {
 	}
 
 	printf("Uncommit files found :: Hit [y/n] to push: ");
+	fflush(stdout);
 
-	if (getCharWithoutEnter() != 'y') {
+	if (getch() != 'y') {
 		putchar('\n');
-		return 1;
+		return 0;
 	}
-	else {
-		putchar('\n');
-	}
+
+	fputs("\n\n", stdout);
 
 	char commit_command[(15 + 100 + 14 + 5)];
 	system("git add --all > /dev/null 2>&1");
@@ -453,7 +447,7 @@ int gitCommit(void) {
 
 	strcat(commit_command, commit);
 	sprintf(commit_command, "git commit -m '%s' %s", commit, " > /dev/null 2>&1");
-	printf("%s\n", commit_command);
+	// printf("%s\n", commit_command);
 
 	if (system(commit_command) == 0) {
 		return 0;
